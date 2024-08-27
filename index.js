@@ -15,9 +15,9 @@ app.post('/submit', async (req, res) => {
 
     try {
         const { insertForm } = require('./services/database');
-        await insertForm({ name, email, company, message });
-
         const token = generateToken({ email });
+        await insertForm({ name, email, company, token });
+
         sendEmail(token, email);
 
         res.json({ message: 'Form data saved and email sent successfully' });
@@ -58,6 +58,28 @@ app.get('/forms', async (req, res) => {
         res.status(500).json({ error: 'An error occurred while fetching forms' });
     }
 });
+
+app.delete('/forms/:id', async (req, res) => {
+    const { id } = req.params;
+
+    if (!id) {
+        return res.status(400).json({ error: 'Form ID is required' });
+    }
+
+    try {
+        const { deleteForm } = require('./services/database');
+        await deleteForm(id);
+        res.json({ message: 'Form deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting form:', error);
+        if (error.message === 'Form not found') {
+            return res.status(404).json({ error: 'Form not found' });
+        } else {
+            return res.status(500).json({ error: 'An error occurred while deleting the form' });
+        }
+    }
+});
+
 
 
 app.get('/', async (req, res) => {

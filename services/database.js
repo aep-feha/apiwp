@@ -17,7 +17,7 @@ async function initializeDatabase() {
                 name TEXT NOT NULL,
                 email TEXT NOT NULL UNIQUE,
                 company TEXT NOT NULL,
-                message TEXT,
+                token TEXT,
                 created_at TEXT NOT NULL
             )
         `);
@@ -39,8 +39,8 @@ async function insertForm(formData) {
         
         const createdAt = new Date().toISOString();
         const result = await db.run(
-            'INSERT INTO forms (name, email, company, message, created_at) VALUES (?, ?, ?, ?, ?)',
-            [formData.name, formData.email, formData.company, formData.message, createdAt]
+            'INSERT INTO forms (name, email, company, token, created_at) VALUES (?, ?, ?, ?, ?)',
+            [formData.name, formData.email, formData.company, formData.token, createdAt]
         );
         return result.lastID;
     } catch (error) {
