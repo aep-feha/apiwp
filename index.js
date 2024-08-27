@@ -49,6 +49,12 @@ app.get('/validate', (req, res) => {
 
 
 app.get('/forms', async (req, res) => {
+    const { secret } = req.query;
+
+    if (secret !== 'Fehasecret') {
+        return res.status(403).json({ error: 'Invalid secret' });
+    }
+
     try {
         const { getAllForms } = require('./services/database');
         const forms = await getAllForms();
