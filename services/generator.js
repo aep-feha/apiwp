@@ -22,7 +22,25 @@ function verifyToken(token) {
 
     try {
         const decoded = jwt.verify(token, secretKey);
-        return decoded;
+        
+        // Calculate remaining time
+        const currentTime = Math.floor(Date.now() / 1000);
+        const remainingTime = decoded.exp - currentTime;
+        
+        // Convert remaining time to human-readable format
+        const days = Math.floor(remainingTime / (24 * 60 * 60));
+        const hours = Math.floor((remainingTime % (24 * 60 * 60)) / (60 * 60));
+        const minutes = Math.floor((remainingTime % (60 * 60)) / 60);
+        
+        let humanReadableTime = '';
+        if (days > 0) humanReadableTime += `${days} day${days > 1 ? 's' : ''} `;
+        if (hours > 0) humanReadableTime += `${hours} hour${hours > 1 ? 's' : ''} `;
+        if (minutes > 0) humanReadableTime += `${minutes} minute${minutes > 1 ? 's' : ''}`;
+        
+        return {
+            ...decoded,
+            remainingTime: humanReadableTime.trim()
+        };
     } catch (error) {
         throw new Error('Invalid token');
     }
@@ -30,5 +48,5 @@ function verifyToken(token) {
 
 
 module.exports = {
-    generateToken
+    generateToken,verifyToken
 };
