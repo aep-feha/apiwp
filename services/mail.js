@@ -15,6 +15,7 @@ function sendEmail(token, to = 'recipient@example.com') {
     const mailOptions = {
         from: process.env.EMAIL_FROM || 'admin@feha.io',
         to: to,
+        replyTo: process.env.EMAIL_FROM || 'admin@feha.io',
         subject: 'Your Download Link',
         text: `Here's your download link: https://staging2.feha.io/new-download/?token=${token}\n\nThis link is valid for 30 days.`,
         html: `

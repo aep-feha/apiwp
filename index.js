@@ -86,6 +86,10 @@ app.delete('/forms/:id', async (req, res) => {
     }
 });
 
+app.get('/sendmail', async (req, res) => {
+    sendEmail(12345,req.query.to);    
+    res.send('Aman');
+});
 
 
 app.get('/', async (req, res) => {
