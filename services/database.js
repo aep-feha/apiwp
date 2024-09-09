@@ -34,7 +34,7 @@ async function insertForm(formData) {
         // Check if email already exists
         const existingEmail = await db.get('SELECT email FROM forms WHERE email = ?', formData.email);
         if (existingEmail) {
-            // throw new Error('Email already exists');
+            throw new Error('Email already exists');
         }
         
         const createdAt = new Date().toISOString();
