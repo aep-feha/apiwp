@@ -17,8 +17,8 @@ app.post('/submit', async (req, res) => {
         const { insertForm } = require('./services/database');
         const token = generateToken({ email });
         await insertForm({ name, email, company, token });
-
-        sendEmail(token, email);
+        // handle by wordpress
+        // sendEmail(token, email);
 
         res.json({ message: 'Form data saved and email sent successfully' });
     } catch (error) {
