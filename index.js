@@ -93,7 +93,7 @@ app.get('/sendmail', async (req, res) => {
 
 
 app.get('/', async (req, res) => {
-    res.send('Hello World!');
+    res.send('Hello Worlds!');
 });
 
 
