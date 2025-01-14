@@ -1,0 +1,30 @@
+name: Copy File to Server via SCP
+
+on:
+  push:
+    branches:
+      - master  # Trigger on push to main branch (adjust as necessary)
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest  # GitHub-hosted runner with Ubuntu
+
+    steps:
+    - name: Check out the code
+      uses: actions/checkout@v2
+
+    - name: Set up SSH
+      run: |
+        mkdir -p ~/.ssh
+        echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan -H $SERVER_HOSTNAME >> ~/.ssh/known_hosts  # Add the server to known hosts
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}  # GitHub Secret with your SSH private key
+        SERVER_HOSTNAME: ${{ secrets.SERVER_HOSTNAME }}  # GitHub Secret with your server's hostname or IP address
+
+    - name: Copy file via SCP
+      run: |
+        scp -r ./index.js ubuntu@$SERVER_HOSTNAME:/home/ubuntu
+      env:
+        SERVER_HOSTNAME: ${{ secrets.SERVER_HOSTNAME }}
